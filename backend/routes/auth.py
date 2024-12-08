@@ -55,32 +55,41 @@ def signup():
         db.session.rollback()
         current_app.logger.error(f"Database error: {e}")
         return jsonify({'error': 'Internal server error', 'details': str(e)}), 500
-    
 
 @auth_bp.route('/api/signin', methods=['GET'])
 def signin():
     # Extract query parameters
-    student_id = request.args.get('Student_id')
+    username = request.args.get('Username')
     password = request.args.get('Password')
 
     # Validate input
-    if not student_id or not password:
-        return jsonify({'error': 'Student ID and Password are required'}), 400
+    if not username or not password:
+        return jsonify({'error': 'Username and Password are required'}), 400
 
     # Query the database for the student
-    student = Student.query.filter_by(Student_id=student_id).first()
+    student = Student.query.filter_by(Username=username).first()
 
     # Check if student exists
     if not student:
-        return jsonify({'error': 'Invalid Student ID or Password'}), 401
+        return jsonify({'error': 'Invalid Username or Password'}), 401
 
     # Verify the password
     if not check_password_hash(student.Password, password):
-        return jsonify({'error': 'Invalid Student ID or Password'}), 401
+        return jsonify({'error': 'Invalid Username or Password'}), 401
 
     # Authentication successful
+    # Return the student data in the response
     return jsonify({
         'message': 'Login successful',
-        'Student_id': student.Student_id,
         'Username': student.Username,
+        'Student_id': student.Student_id,
+        'Email': student.Email,
+        'Gender': student.Gender,
+        'Phonenumber': student.Phonenumber,
+        'Std_type': student.Std_type,
+        'Std_firstName': student.Std_firstName,
+        'Std_lastName': student.Std_lastName,
+        'Room_id' : student.Room_id,
+        'Bldg_id' : student.Bldg_id,
+        'Gender' : student.Gender,
     }), 200

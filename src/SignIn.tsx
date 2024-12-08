@@ -3,42 +3,47 @@ import axios, { AxiosError } from "axios";
 import { Building2} from 'lucide-react';
 import { Link, useNavigate} from 'react-router-dom';
 const SignIn: React.FC = () => {
+
   const [credentials, setCredentials] = useState({
-    Student_id: "",
+    Username: "",
     Password: "",
   });
 
-const [error, setError] = useState<string | null>(null);
-const navigate = useNavigate(); 
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); 
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement| HTMLSelectElement>) => {
-  const { name, value } = e.target;
-  setCredentials((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement| HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setCredentials((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError(null); // Clear previous errors
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null); // Clear previous errors
 
-  try {
-    // Send GET request using Axios
-    const response = await axios.get(`http://localhost:5000/api/signin`, {
-      params: {
-        Student_id: credentials.Student_id,
-        Password: credentials.Password,
-      },
-    });
+    try {
+      // Send GET request using Axios
+      const response = await axios.get('http://localhost:5000/api/signin', {
+        params: {
+          Username: credentials.Username,
+          Password: credentials.Password,
+        },
+    }); 
 
-    console.log("Login successful: ", response.data);
-    navigate('/Home');
-  } catch (error) {
+      console.log("Login successful: ", response.data);
+
+      // Store student data in localStorage
+      const studentData = response.data;
+      localStorage.setItem('studentData', JSON.stringify(studentData));
+      navigate('/Home');
+    }catch (error) {
     const axiosError = error as AxiosError;
 
     if (axiosError.response && axiosError.response.data) {
-      setError((axiosError.response.data as { error: string }).error || "Invalid ID or Password");
+      setError((axiosError.response.data as { error: string }).error || "Invalid Usename or Password");
     } else {
       setError("An error occurred. Please try again.");
     }
@@ -60,17 +65,17 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="Student_id" className="block text-sm font-medium text-gray-600">
-                  ID
+                <label htmlFor="Username" className="block text-sm font-medium text-gray-600">
+                  Username
                 </label>
                 <input
                   type="text"
-                  id="Student_id"
-                  name="Student_id"
-                  value={credentials.Student_id}
+                  id="Username"
+                  name="Username"
+                  value={credentials.Username}
                   onChange={handleChange}
                   className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-200"
-                  placeholder="Enter your ID"
+                  placeholder="Enter your Username"
                   required
                 />
               </div>
