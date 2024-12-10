@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Building2 } from 'lucide-react';
+import Modal from './Modal';  // You'll create this modal component next
 
-interface Room {
-  number: string;
-  type: 'single' | 'double' | 'triple';
-  available: boolean;
-}
-
-const buildings = Array.from({ length: 38 }, (_, i) => i + 19);
-
-const mockRooms: Room[] = [
-  { number: '01', type: 'single', available: true },
-  { number: '02', type: 'double', available: false },
-  { number: '03', type: 'triple', available: true },
-  { number: '04', type: 'single', available: false },
-  { number: '05', type: 'double', available: true },
-  { number: '06', type: 'triple', available: true },
-];
-
-export default function RoomSelector() {
+export default function RoomSelector({ roomData, buildingData }) {
   const [selectedBuilding, setSelectedBuilding] = useState<number | null>(null);
+  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to show/hide the modal
+  const [selectedRoom, setSelectedRoom] = useState(null); // Store selected room for the modal
+
+  useEffect(() => {
+    if (selectedBuilding !== null) {
+      const roomsForBuilding = roomData.filter(Room => Room.Bldg_id === selectedBuilding);
+      setFilteredRooms(roomsForBuilding);
+    } else {
+      setFilteredRooms([]);
+    }
+  }, [selectedBuilding, roomData]);
+
+  // Handle opening and closing of modal
+  const openModal = (room) => {
+    setSelectedRoom(room);  // Set the selected room data
+    setShowModal(true); // Show the modal
+  };
+
+  const closeModal = () => {
+    setShowModal(false); // Hide the modal
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
@@ -32,49 +38,53 @@ export default function RoomSelector() {
             onChange={(e) => setSelectedBuilding(Number(e.target.value))}
           >
             <option value="">Select Building</option>
-            {buildings.map((building) => (
-              <option key={building} value={building}>
-                Building {building}
+            {buildingData.map((Building) => (
+              <option key={Building.Bldg_id} value={Building.Bldg_id}>
+                Building {Building.Bldg_id}
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      {selectedBuilding ? (
+      {selectedBuilding && filteredRooms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockRooms.map((room) => (
-            <div
-              key={room.number}
-              className="border border-emerald-200 rounded-lg p-4 flex items-center justify-between hover:border-emerald-600 transition-colors"
+          {filteredRooms.map((Room) => (
+            <button
+              key={Room.Room_numb}
+              className="bg-white border  shadow-md rounded-lg p-4 flex items-center justify-between hover:border-emerald-600 transition-colors hover:bg-white"
+              onClick={() => openModal(Room)} // Open modal on button click
             >
               <div>
                 <div className="flex items-center space-x-2">
                   <Building2 className="h-5 w-5 text-emerald-800" />
                   <span className="font-semibold text-emerald-900">
-                    Building {selectedBuilding} - Room {room.number}
+                    Building {selectedBuilding} - Room {Room.Room_numb}
                   </span>
                 </div>
-                <p className="text-sm text-emerald-700 mt-1 capitalize">{room.type}</p>
+                <p className="text-sm text-emerald-700 mt-1 capitalize">{Room.Room_type}</p>
               </div>
               <div
                 className={`px-3 py-1 rounded-full ${
-                  room.available
-                    ? 'bg-emerald-200 text-emerald-800'
+                  Room.Status === 'available'
+                    ? 'bg-emerald-100 text-emerald-900'
                     : 'bg-red-200 text-red-800'
                 }`}
               >
-                <span className="font-medium">
-                  {room.available ? 'Available' : 'Unavailable'}
-                </span>
+                <span className="font-medium">{Room.Status}</span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       ) : (
         <div className="text-center py-12 text-emerald-700">
           Select a building to view available rooms
         </div>
+      )}
+
+      {/* Modal */}
+      {showModal && selectedRoom && (
+        <Modal room={selectedRoom} onClose={closeModal} />
       )}
     </div>
   );

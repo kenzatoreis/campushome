@@ -21,7 +21,7 @@ export default function Header() {
               Home
             </Link> {/* Use Link for navigation */}
             <Link to="/Home/Booking" className="text-lg text-slate-200 font-semibold p-3 rounded-lg hover:bg-emerald-800">Booking</Link>
-            <a href="#" className="text-lg text-slate-200 font-semibold p-3 rounded-lg hover:bg-emerald-800">Storage</a>          
+            <Link to="/Home/Storage" className="text-lg text-slate-200 font-semibold p-3 rounded-lg hover:bg-emerald-800">Storage</Link>          
             <Link to="/Home/RoomExchange" className="text-lg text-slate-200 font-semibold p-3 rounded-lg hover:bg-emerald-800"> Room Exchange</Link>
           </div>
 

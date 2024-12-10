@@ -40,6 +40,7 @@ const SignIn: React.FC = () => {
       localStorage.setItem('studentData', JSON.stringify(studentData));
       
       navigate('/Home');
+      window.location.reload();
     }catch (error) {
     const axiosError = error as AxiosError;
 

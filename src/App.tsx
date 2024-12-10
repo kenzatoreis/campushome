@@ -9,18 +9,17 @@ import {UserProvider} from './userData';
 
 function App() {
   return (
-    
-      <BrowserRouter>
-        <UserProvider>
+      <UserProvider>
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<SignIn />}/>
             <Route path="/Home" element={<Home />} />
             <Route path="/Home/RoomExchange" element={<RoomExchange />} />
             <Route path="/Home/Booking" element={<Booking />} />
             <Route path="/SignUp" element={<SignUp />} />
-          </Routes>
-        </UserProvider>
-      </BrowserRouter>
+          </Routes>  
+        </BrowserRouter>
+      </UserProvider>
   );
 }
 export default App;

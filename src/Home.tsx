@@ -1,6 +1,5 @@
-import React, { useState, useEffect} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom'
-import axios from 'axios';
 import Header from './components/Header';
 import MyHousing from './components/MyHousing';
 import Dates from './components/Dates';
@@ -10,9 +9,10 @@ const Home: React.FC = () => {
   const {username, student_id, gender, email, Room_id, Bldg_id} = useUser();
 
   return (
+    
     <div className="min-h-screen bg-slate-100">
       <Header/> {/* Pass student data to Header */}
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-emerald-900">My Campus Housing {username}</h1>

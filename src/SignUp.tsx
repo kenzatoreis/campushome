@@ -40,7 +40,7 @@ try {
 
   if (response.status === 200) {
     console.log("Signup successful:", response.data);
-    navigate('/Home');
+    navigate('/');
   }
 } 
 catch (error) {

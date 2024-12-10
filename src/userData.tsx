@@ -1,12 +1,10 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import axios from 'axios';
 
-const UserContext = createContext<any>(null);
+const UserContext = createContext(null);
 
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-
   const [student, setStudent] = useState<{
     Username: string;
     Student_id: number;
@@ -20,6 +18,7 @@ export const UserProvider = ({ children }) => {
     Bldg_id: number;
   } | null>(null);
 
+  // Check if user data exists in localStorage
   useEffect(() => {
     const storedData = localStorage.getItem('studentData');
     if (storedData) {
@@ -27,7 +26,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  // Only create the 'user' object if 'student' is not null
+  // Ensure that 'user' is correctly updated when 'student' changes
   const user = student ? {
     username: student.Username,
     student_id: student.Student_id,
