@@ -1,11 +1,10 @@
 import {useState, useEffect} from 'react';
 import {Album} from "lucide-react";
 import axios from 'axios';
-import Header from './components/Header';
-import RoomSelector from './components/RoomSelector';
+import RoomSelector2 from './components/RoomSelector2';
 
 
-function Home() {
+export function AvailableRooms() {
   const [roomData, setRoomData] = useState([]);
 
   useEffect(() => {
@@ -27,17 +26,15 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-emerald-900 rounded-lg p-4 pr-6 flex absolute space-x-2 shadow-lg">
+        <div className="bg-emerald-800 rounded-lg p-4 pr-6 flex absolute space-x-2 shadow-lg">
           <Album className="h-8 w-8 text-white mt-1"/>
-          <p className="text-3xl font-bold text-white">Booking</p>
+          <p className="text-3xl font-bold text-white">Available Rooms</p>
         </div>
-        <RoomSelector roomData={roomData} buildingData={buildingData}/>
-        {/* Include AI here*/}
+        <RoomSelector2 roomData={roomData} buildingData={buildingData}/>
       </main>
     </div>
   );
 }
-export default Home;
+export default AvailableRooms;

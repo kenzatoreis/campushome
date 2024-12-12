@@ -23,6 +23,7 @@ interface ModalProps {
 
 
 const Modal: React.FC<ModalProps> = ({ room, onClose }) => {
+    
     const {user, setUser} = useUser();
     console.log("student:", user.student_id);
 
@@ -54,24 +55,25 @@ const Modal: React.FC<ModalProps> = ({ room, onClose }) => {
           <X className="h-6 w-6" />
         </button>
         
-
-        <div className="mb-4 text-emerald-900 mt-4">
-          <strong>Building:</strong> {room.Bldg_id}
-        </div>
-        <div className="mb-4 text-emerald-900">
-          <strong>Room Number:</strong> {room.Room_numb}
-        </div>
-        <div className="mb-4 text-emerald-900">
-          <strong>Room Type:</strong> {room.Room_type}
-        </div>
-        <div className="mb-4 text-emerald-900">
-          <strong>Status:</strong> {room.Status}
-        </div>
-        <div className="mb-6 text-emerald-900">
-          <strong>Occupancy:</strong> {room.Occupancy}
+        <div className="bg-white border  shadow-md rounded-lg mt-7 mb-4 p-4">
+          <div className="mb-4 text-emerald-900">
+            <strong>Building:</strong> {room.Bldg_id}
+          </div>
+          <div className="mb-4 text-emerald-900">
+            <strong>Room Number:</strong> {room.Room_numb}
+          </div>
+          <div className="mb-4 text-emerald-900">
+            <strong>Room Type:</strong> {room.Room_type}
+          </div>
+          <div className="mb-4 text-emerald-900">
+            <strong>Status:</strong> {room.Status}
+          </div>
+          <div className="mb-3 text-emerald-900">
+            <strong>Occupancy:</strong> {room.Occupancy}
+          </div>
         </div>
         <button onClick={Book} className="bg-emerald-800 shadow-md rounded-lg p-3 flex items-center hover:bg-emerald-700">
-            <p className="text-slate-50 text-base">Book Now</p>
+              <p className="text-slate-50 text-base">Book Now</p>
         </button>
       </div>
     </div>

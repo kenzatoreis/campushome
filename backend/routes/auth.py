@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import Student, db
+from models import Student, db, Admin
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -66,30 +66,40 @@ def signin():
     if not username or not password:
         return jsonify({'error': 'Username and Password are required'}), 400
 
-    # Query the database for the student
+    # Check if the user is a student
     student = Student.query.filter_by(Username=username).first()
+    if student and check_password_hash(student.Password, password):
+        # Authentication successful for student
+        
+        return jsonify({
+            'role': 'student',
+            'message': 'Login successful',
+            'Username': student.Username,
+            'Student_id': student.Student_id,
+            'Email': student.Email,
+            'Gender': student.Gender,
+            'Phonenumber': student.Phonenumber,
+            'Std_type': student.Std_type,
+            'Std_firstName': student.Std_firstName,
+            'Std_lastName': student.Std_lastName,
+            'Room_id': student.Room_id,
+            'Bldg_id': student.Bldg_id,
+        }), 200
 
-    # Check if student exists
-    if not student:
-        return jsonify({'error': 'Invalid Username or Password'}), 401
+    # Check if the user is an admin
+    admin = Admin.query.filter_by(Username=username).first()
+    admin2 = Admin.query.filter_by(Password=password).first()
+    if admin and admin2:
+        # Authentication successful for admin
+        return jsonify({
+            'role': 'admin',
+            'message': 'Login successful',
+            'Admin_id': admin.Admin_id,
+            'Admin_firstname': admin.Admin_firstname,
+            'Admin_lastname': admin.Admin_lastname,
+            'Email': admin.Email,
+            'Phone_num': admin.Phone_num,
+        }), 200
 
-    # Verify the password
-    if not check_password_hash(student.Password, password):
-        return jsonify({'error': 'Invalid Username or Password'}), 401
-
-    # Authentication successful
-    # Return the student data in the response
-    return jsonify({
-        'message': 'Login successful',
-        'Username': student.Username,
-        'Student_id': student.Student_id,
-        'Email': student.Email,
-        'Gender': student.Gender,
-        'Phonenumber': student.Phonenumber,
-        'Std_type': student.Std_type,
-        'Std_firstName': student.Std_firstName,
-        'Std_lastName': student.Std_lastName,
-        'Room_id' : student.Room_id,
-        'Bldg_id' : student.Bldg_id,
-        'Gender' : student.Gender,
-    }), 200
+    # Authentication failed
+    return jsonify({'error': 'Invalid Username or Password'}), 401

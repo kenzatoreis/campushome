@@ -55,7 +55,8 @@ class Admin(db.Model):
     Admin_id = db.Column(db.Integer, primary_key=True)
     Admin_firstname = db.Column(db.String(50))
     Admin_lastname = db.Column(db.String(50))
-    Email = db.Column(db.String(100), unique=True, nullable=False)
+    Email = db.Column(db.String(100))
+    Username = db.Column(db.String(100), nullable=False)
     Password = db.Column(db.String(100), nullable=False)
     Phone_num = db.Column(db.String(15))
 
@@ -87,6 +88,21 @@ class Booking(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('Student.Student_id'), nullable=False)
     bldg_id = db.Column(db.Integer, db.ForeignKey('Building.Bldg_id'), nullable=False)
     room_numb = db.Column(db.String, db.ForeignKey('Room.Room_numb'), nullable=False)
+
+class PreRegistration(db.Model):
+    __tablename__ = 'PreRegistration'
+
+    PreRegistrationID = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Auto-incrementing primary key
+    Student_id = db.Column(db.Integer, db.ForeignKey('Student.Student_id'), nullable=False)  # References Student.Student_id
+    Bldg_id = db.Column(db.Integer, db.ForeignKey('Building.Bldg_id'), nullable=False)  # References Building.Bldg_id
+    Smoker = db.Column(db.Boolean, nullable=False)  # Whether the student smokes
+    SleepPreference = db.Column(db.String(10), nullable=False)  # Sleep preference ('Early' or 'Late')
+    StudyPreference = db.Column(db.String(10), nullable=False)  # Study preference ('Early' or 'Late')
+    PreferredRoommateID = db.Column(db.Integer, db.ForeignKey('Student.Student_id'), nullable=True)  # Optional roommate preference
+
+    student = db.relationship('Student', foreign_keys=[Student_id], backref='pre_registrations', lazy=True)  # Relationship with Student
+    preferred_roommate = db.relationship('Student', foreign_keys=[PreferredRoommateID], backref='preferred_by', lazy=True)  # Self-referential relationship
+    building = db.relationship('Building', backref='pre_registrations', lazy=True)  # Relationship with Building
 
 def reset_student_id_sequence():
     db.session.execute(text('ALTER SEQUENCE "Student_new_Student_id_seq" RESTART WITH 10001'))  # Verify actual sequence name

@@ -35,12 +35,15 @@ const ButtonWithSquare: React.FC = () => {
 
       {/* The square will be positioned absolutely, with updated width */}
       {showSquare && user && (
-        <div className="absolute flex flex-col items-center justify-center top-12 w-48 h-56 bg-slate-200 mt-4 mr-36 rounded-xl shadow-lg space-y-2">
-          <p className="m-4 text-emerald-900 font-semibold">ID: {user.student_id}</p>
-          <p className="m-4 text-emerald-900 font-semibold">Username: {user.username}</p>
-          <button onClick={handleLogout} className="text-emerald-900">
-            Logout
-          </button>
+        <div className="absolute flex flex-col items-center justify-center top-12 w-48 h-60 bg-slate-100 mt-4 mr-36 rounded-xl shadow-lg space-y-2">
+          <div className="bg-slate-50 rounded-lg m-4 shadow-md">
+            <p className="m-4 text-emerald-900 font-bold text-center">ID: {user.student_id}</p>
+            <p className="m-4 text-emerald-900 font-bold text-center">Username: {user.username}</p>
+            
+          </div>
+          <button onClick={handleLogout} className="text-white bg-emerald-800 rounded-full font-semibold hover:bg-emerald-700 rounded-full py-2 px-3">
+              Logout
+            </button>
         </div>
       )}
     </div>

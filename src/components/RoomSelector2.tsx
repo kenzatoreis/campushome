@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { Building2 } from 'lucide-react';
 import Modal from './Modal';  // You'll create this modal component next
 
-export default function RoomSelector({ roomData, buildingData }) {
+export default function RoomSelector2({ roomData, buildingData }) {
   const [selectedBuilding, setSelectedBuilding] = useState<number | null>(null);
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [showModal, setShowModal] = useState(false); // State to show/hide the modal
@@ -58,11 +58,8 @@ export default function RoomSelector({ roomData, buildingData }) {
                   Floor: {index/6 +1}
                 </div>
               )}
-              <button
-                key={Room.Room_numb}
-                className="bg-white border  shadow-md rounded-lg p-4 flex items-center justify-between hover:border-emerald-600 transition-colors hover:bg-white"
-                onClick={() => openModal(Room)} // Open modal on button click
-              >
+              <div
+                className="bg-white border  shadow-md rounded-lg p-4 flex items-center justify-between hover:border-emerald-600 transition-colors hover:bg-white">
                 <div>
                   <div className="flex items-center space-x-2">
                     <Building2 className="h-5 w-5 text-emerald-700" />
@@ -81,7 +78,7 @@ export default function RoomSelector({ roomData, buildingData }) {
                 >
                   <span className="font-medium">{Room.Status}</span>
                 </div>
-              </button>
+              </div>
           
             </React.Fragment>
           ))}

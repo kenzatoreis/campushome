@@ -33,13 +33,21 @@ const SignIn: React.FC = () => {
         },
     }); 
 
-      console.log("Login successful: ", response.data);
+    const { role, message, ...userData } = response.data;
 
-      // Store student data in localStorage
+    // Store user data in localStorage
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    console.log("Login successful: ", message);
+
+    // Redirect based on role
+    if (role === 'student') {
       const studentData = response.data;
       localStorage.setItem('studentData', JSON.stringify(studentData));
-      
       navigate('/Home');
+    } else if (role === 'admin') {
+      navigate('/Admin');
+    }
       window.location.reload();
     }catch (error) {
     const axiosError = error as AxiosError;
@@ -126,12 +134,7 @@ const SignIn: React.FC = () => {
               to="/SignUp"
               className="mt-4 px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-emerald-700">
               Sign Up
-            </Link>
-            <Link
-              to="/Home"
-              className="mt-4 px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-emerald-700">
-              Go Home
-            </Link>
+            </Link> 
           </div>
         </div>
       </div>
